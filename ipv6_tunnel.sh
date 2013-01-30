@@ -15,6 +15,11 @@ restart_cmd="restart_tunnel"
 pidfile="/var/run/${name}.pid"
 
 start_tunnel() {
+    if [ -f ${pidfile} ]; then
+        echo "Already started? ${pidfile} shows pid of: $(cat ${pidfile})"
+        return 1
+    fi
+
     route add -host 72.52.104.74 192.168.3.1
     ifconfig gif0 create
     ifconfig gif0 tunnel 192.168.3.10 72.52.104.74
@@ -29,6 +34,11 @@ start_tunnel() {
 }
 
 stop_tunnel() {
+    if [ ! -f ${pidfile} ]; then
+        echo "Tunnel not online."
+        return 1
+    fi
+
     route del 72.52.104.74
     route del -inet6 default
     ifconfig gif0 destroy
