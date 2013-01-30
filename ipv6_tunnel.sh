@@ -12,6 +12,7 @@ pidfile="/var/run/${name}.pid"
 start_cmd="start_tunnel"
 stop_cmd="stop_tunnel"
 restart_cmd="restart_tunnel"
+pidfile="/var/run/${name}.pid"
 
 start_tunnel() {
     route add -host 72.52.104.74 192.168.3.1
@@ -23,13 +24,16 @@ start_tunnel() {
     ifconfig gif0 up
     ifconfig bge0 inet6 2001:470:8142:2::1/64
     sleep 1
-    ping6 -c 5 google.com > /dev/null 2>&1
+    ping6 -i 15 0xfeedface.org > /dev/null 2>&1 &
+    echo $! > ${pidfile}
 }
 
 stop_tunnel() {
     route del 72.52.104.74
     route del -inet6 default
     ifconfig gif0 destroy
+    kill $(cat ${pidfile})
+    rm -f ${pidfile}
 }
 
 restart_tunnel() {
