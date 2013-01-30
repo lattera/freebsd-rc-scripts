@@ -30,7 +30,6 @@ stop_tunnel() {
     route del 72.52.104.74
     route del -inet6 default
     ifconfig gif0 destroy
-    rm -f ${pidfile}
 }
 
 restart_tunnel() {
