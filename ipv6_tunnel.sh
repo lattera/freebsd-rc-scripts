@@ -20,6 +20,13 @@ start_tunnel() {
         return 1
     fi
 
+    while true; do
+        ping -c 1 192.168.3.1 > /dev/null 2>&1
+        if [ $? == 0 ]; then
+            break
+        fi
+    done
+
     route add -host 72.52.104.74 192.168.3.1
     ifconfig gif0 create
     ifconfig gif0 tunnel 192.168.3.10 72.52.104.74
