@@ -7,7 +7,6 @@
 . /etc/rc.subr
 
 name="ipv6_tunnel"
-rcvar=`set_rcvar`
 pidfile="/var/run/${name}.pid"
 start_cmd="start_tunnel"
 stop_cmd="stop_tunnel"
@@ -29,7 +28,7 @@ start_tunnel() {
 
     route add -host 72.52.104.74 192.168.3.1
     ifconfig gif0 create
-    ifconfig gif0 tunnel 192.168.3.10 72.52.104.74
+    ifconfig gif0 tunnel $(ifconfig | grep 192.168.3 | awk '{print $2;}' | head -n 1) 72.52.104.74
     ifconfig gif0 inet6 2001:470:1f04:1a28::2 2001:470:1f04:1a28::1 prefixlen 128
     ifconfig gif0 inet6 2001:470:8142::1/64
     route -n add -inet6 default 2001:470:1f04:1a28::1
