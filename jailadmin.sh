@@ -3,6 +3,8 @@
 # PROVIDE: jailadmin
 # REQUIRE: openvpn mysql apache22
 
+site_path="/www/shawn-vm-host.work.0xfeedface.org"
+
 . /etc/rc.subr
 
 name="ngjail"
@@ -13,7 +15,7 @@ restart_cmd="jailadmin_restart_jails"
 pidfile="/var/run/${name}.pid"
 
 jailadmin_start_jails() {
-    /usr/local/bin/drush -r /www/shawn-vm-host.work.0xfeedface.org autoboot
+    /usr/local/bin/drush -r ${site_path} autoboot
     echo $! > ${pidfile}
 }
 
@@ -22,7 +24,7 @@ jailadmin_stop_jails() {
         return 1
     fi
 
-    /usr/local/bin/drush -r /www/shawn-vm-host.work.0xfeedface.org stopall
+    /usr/local/bin/drush -r ${site_path} stopall
 
     rm -f ${pidfile}
 }
