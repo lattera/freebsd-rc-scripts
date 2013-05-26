@@ -3,6 +3,11 @@
 # PROVIDE: jailadmin
 # REQUIRE: openvpn mysql apache22
 
+old_path="${PATH}"
+
+PATH="${PATH}:/usr/local/bin:/usr/local/sbin"
+export PATH
+
 site_path="/www/shawn-vm-host.work.0xfeedface.org"
 
 . /etc/rc.subr
@@ -36,3 +41,6 @@ jailadmin_restart_jails() {
 
 load_rc_config $name
 run_rc_command "$1"
+
+PATH="${old_path}"
+export PATH
